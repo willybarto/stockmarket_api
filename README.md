@@ -4,15 +4,15 @@
 
 ## Tipo di progetto
 
-REST API [file:1]
+REST API 
 
 ## Framework utilizzato
 
-Django + Django REST Framework + Simple JWT [file:1]
+Django + Django REST Framework + Simple JWT 
 
 ## Descrizione del progetto
 
-Stock Market API è una REST API back-end che simula una piccola piattaforma di mercato azionario con autenticazione, permessi basati sui ruoli, prezzi storici, gestione dei portafogli e valutazione del portafoglio. Il progetto è stato sviluppato per soddisfare i requisiti della traccia **Stock Market API** dell’esercitazione Back-end PPM 2026, nella quale i dati di borsa possono essere simulati e gli utenti hanno livelli di accesso diversi in base al ruolo.[file:1]
+Stock Market API è una REST API back-end che simula una piccola piattaforma di mercato azionario con autenticazione, permessi basati sui ruoli, prezzi storici, gestione dei portafogli e valutazione del portafoglio. Il progetto è stato sviluppato per soddisfare i requisiti della traccia **Stock Market API** dell’esercitazione Back-end PPM 2026, nella quale i dati di borsa possono essere simulati e gli utenti hanno livelli di accesso diversi in base al ruolo.
 
 ## Funzionalità principali
 
@@ -30,16 +30,16 @@ Stock Market API è una REST API back-end che simula una piccola piattaforma di 
 ### Funzionalità per utente Basic
 - Accesso al quote endpoint con limite giornaliero di 10 richieste.
 - Accesso ai prezzi storici fino a 30 giorni.
-- Gestione dei propri portafogli.[file:1]
+- Gestione dei propri portafogli.
 
 ### Funzionalità per utente Pro
 - Accesso al quote endpoint con limite giornaliero di 100 richieste.
 - Accesso ai prezzi storici fino a 365 giorni.
-- Gestione dei propri portafogli con accesso esteso ai dati storici.[file:1]
+- Gestione dei propri portafogli con accesso esteso ai dati storici.
 
 ## Ruoli utente
 
-L’API utilizza un modello utente personalizzato con controllo degli accessi basato sui ruoli. I due ruoli principali previsti dalla traccia sono implementati come `basic` e `pro`, e i permessi sono applicati direttamente nella logica degli endpoint.[file:1]
+L’API utilizza un modello utente personalizzato con controllo degli accessi basato sui ruoli. I due ruoli principali previsti dalla traccia sono implementati come `basic` e `pro`, e i permessi sono applicati direttamente nella logica degli endpoint.
 
 ## Modello relazionale dei dati
 
@@ -58,7 +58,7 @@ Relazioni principali:
 - `PortfolioItem -> Asset` (ForeignKey)
 - `QuoteRequestLog -> CustomUser` (ForeignKey)
 
-Questa struttura soddisfa il requisito di avere almeno due relazioni reali tra tabelle/risorse esposte dall’API.[file:1]
+Questa struttura soddisfa il requisito di avere almeno due relazioni reali tra tabelle/risorse esposte dall’API.
 
 ## Database SQLite incluso
 
@@ -70,15 +70,15 @@ Il database contiene già:
 - account demo,
 - asset demo,
 - prezzi storici simulati,
-- portafogli di esempio e relativi elementi.[file:1]
+- portafogli di esempio e relativi elementi.
 
 ## Account demo
 
-- `admin_demo / admin12345` — amministratore / superuser [file:1]
-- `basic_demo / basic12345` — utente basic [file:1]
-- `pro_demo / pro12345` — utente pro [file:1]
+- `admin_demo / admin12345` — amministratore / superuser 
+- `basic_demo / basic12345` — utente basic 
+- `pro_demo / pro12345` — utente pro 
 
-Queste credenziali sono state create esclusivamente per la valutazione del progetto, come richiesto dalla consegna.[file:1]
+Queste credenziali sono state create esclusivamente per la valutazione del progetto, come richiesto dalla consegna.
 
 ## Installazione locale
 
@@ -126,7 +126,7 @@ URL locale base:
 http://127.0.0.1:8000/
 ```
 
-La consegna richiede che il repository contenga tutto il necessario per eseguire il progetto localmente e che il README spieghi chiaramente i passaggi di installazione e avvio.[file:1]
+La consegna richiede che il repository contenga tutto il necessario per eseguire il progetto localmente e che il README spieghi chiaramente i passaggi di installazione e avvio.
 
 ## Deploy online
 
@@ -136,7 +136,7 @@ Link del deploy:
 INSERISCI_QUI_IL_LINK_RENDER_O_RAILWAY
 ```
 
-La consegna richiede che la REST API sia raggiungibile online e che il link sia riportato chiaramente nel README.[file:1]
+La consegna richiede che la REST API sia raggiungibile online e che il link sia riportato chiaramente nel README.
 
 ## Endpoint principali
 
@@ -159,11 +159,11 @@ La consegna richiede che la REST API sia raggiungibile online e che il link sia 
 | GET | `/api/portfolios/<id>/valuation/` | Sì | Solo proprietario | Nessuno | `{"portfolio_id":1,"portfolio_name":"Basic Growth Portfolio","total_value":2212.23,"items":[...]}` | Calcola il valore di mercato corrente del portafoglio. |
 | GET/PUT/DELETE | `/api/portfolio-items/<id>/` | Sì | Solo proprietario | Dipende dal metodo | Oggetto JSON / `204 No Content` | Visualizza, modifica o elimina un singolo elemento del portafoglio. |
 
-La consegna richiede esplicitamente che per una REST API il README contenga una tabella degli endpoint con metodo, URL, autenticazione, ruolo, request body, response example e descrizione.[file:1]
+La consegna richiede esplicitamente che per una REST API il README contenga una tabella degli endpoint con metodo, URL, autenticazione, ruolo, request body, response example e descrizione.
 
 ## Workflow di test con HTTPie
 
-La consegna accetta esplicitamente HTTPie come workflow minimo di test per una REST API, purché i comandi siano completi e riproducibili.[file:1]
+La consegna accetta esplicitamente HTTPie come workflow minimo di test per una REST API, purché i comandi siano completi e riproducibili.
 
 ### 1. Login come utente basic
 
@@ -203,7 +203,7 @@ http GET "http://127.0.0.1:8000/api/assets/1/history/?days=30" "Authorization: B
 http GET "http://127.0.0.1:8000/api/assets/1/history/?days=365" "Authorization: Bearer $TOKEN"
 ```
 
-Risultato atteso: `403 Forbidden`, perché un utente basic può accedere a un massimo di 30 giorni di storico.[file:1]
+Risultato atteso: `403 Forbidden`, perché un utente basic può accedere a un massimo di 30 giorni di storico.
 
 ### 7. Lista dei portafogli dell’utente
 
@@ -242,7 +242,7 @@ PRO_TOKEN="INCOLLA_QUI_ACCESS_TOKEN_PRO"
 http GET "http://127.0.0.1:8000/api/assets/1/history/?days=365" "Authorization: Bearer $PRO_TOKEN"
 ```
 
-Questo test mostra in modo riproducibile la differenza tra utente `basic` e utente `pro`, che è uno dei requisiti fondamentali della traccia scelta.[file:1]
+Questo test mostra in modo riproducibile la differenza tra utente `basic` e utente `pro`, che è uno dei requisiti fondamentali della traccia scelta.
 
 ## Validazione e gestione errori
 
@@ -252,7 +252,7 @@ L’API include:
 - risposte JSON coerenti per richieste non valide,
 - `403 Forbidden` per violazioni dei permessi di ruolo,
 - `404 Not Found` per risorse inesistenti,
-- `429 Too Many Requests` quando viene superato il limite giornaliero del quote endpoint.[file:1]
+- `429 Too Many Requests` quando viene superato il limite giornaliero del quote endpoint.
 
 ## Struttura del progetto
 
@@ -267,10 +267,10 @@ stockmarket_api/
 └── README.md
 ```
 
-La consegna richiede una struttura modulare con almeno due app/moduli coerenti e codice organizzato.[file:1]
+La consegna richiede una struttura modulare con almeno due app/moduli coerenti e codice organizzato.
 
 ## Note finali
 
-- I dati di mercato sono simulati, come consentito esplicitamente dalla traccia del progetto.[file:1]
-- Il database incluso permette al docente di testare subito i flussi principali senza dover inserire dati manualmente.[file:1]
-- Il progetto può essere ricreato tramite migrazioni e può essere esplorato immediatamente usando il database SQLite incluso.[file:1]
+- I dati di mercato sono simulati, come consentito esplicitamente dalla traccia del progetto.
+- Il database incluso permette al docente di testare subito i flussi principali senza dover inserire dati manualmente.
+- Il progetto può essere ricreato tramite migrazioni e può essere esplorato immediatamente usando il database SQLite incluso.
