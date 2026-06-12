@@ -133,7 +133,7 @@ La consegna richiede che il repository contenga tutto il necessario per eseguire
 Link del deploy:
 
 ```text
-INSERISCI_QUI_IL_LINK_RENDER_O_RAILWAY
+https://stockmarket-api-e7rk.onrender.com
 ```
 
 La consegna richiede che la REST API sia raggiungibile online e che il link sia riportato chiaramente nel README.
