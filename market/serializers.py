@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Asset, HistoricalPrice, Portfolio, PortfolioItem
+from .models import Asset, HistoricalPrice, Portfolio, PortfolioItem, Watchlist
 
 
 class AssetSerializer(serializers.ModelSerializer):
@@ -75,3 +75,38 @@ class PortfolioCreateUpdateSerializer(serializers.ModelSerializer):
         if len(value.strip()) < 3:
             raise serializers.ValidationError("Il nome del portfolio deve avere almeno 3 caratteri.")
         return value.strip()
+
+
+class WatchlistSerializer(serializers.ModelSerializer):
+    asset_symbol = serializers.CharField(source="asset.symbol", read_only=True)
+    asset_name = serializers.CharField(source="asset.name", read_only=True)
+    latest_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Watchlist
+        fields = ["id", "asset", "asset_symbol", "asset_name", "latest_price", "added_at"]
+        read_only_fields = ["added_at"]
+
+    def get_latest_price(self, obj):
+        latest = obj.asset.historical_prices.order_by("-date").first()
+        if latest:
+            return {
+                "date": latest.date,
+                "close_price": str(latest.close_price),
+                "open_price": str(latest.open_price),
+            }
+        return None
+
+    def validate_asset(self, value):
+        if not value.is_active:
+            raise serializers.ValidationError("Non è possibile aggiungere un asset inattivo alla watchlist.")
+        return value
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        if request and request.user:
+            if Watchlist.objects.filter(user=request.user, asset=attrs["asset"]).exists():
+                raise serializers.ValidationError(
+                    {"asset": "Questo asset è già nella tua watchlist."}
+                )
+        return attrs

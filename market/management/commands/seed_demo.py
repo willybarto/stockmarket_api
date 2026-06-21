@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-from market.models import Asset, HistoricalPrice, Portfolio, PortfolioItem
+from market.models import Asset, HistoricalPrice, Portfolio, PortfolioItem, Watchlist
 
 User = get_user_model()
 
@@ -138,5 +138,10 @@ class Command(BaseCommand):
             asset=assets[4],
             defaults={"quantity": 2, "average_buy_price": Decimal("130.00")}
         )
+
+        self.stdout.write("Creazione watchlist demo per utente pro...")
+
+        for asset in assets[:3]:
+            Watchlist.objects.get_or_create(user=pro_user, asset=asset)
 
         self.stdout.write(self.style.SUCCESS("Seed demo completato con successo."))

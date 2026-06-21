@@ -9,6 +9,8 @@ from .views import (
     PortfolioItemCreateView,
     PortfolioItemDetailView,
     PortfolioValuationView,
+    WatchlistListCreateView,
+    WatchlistDeleteView,
 )
 
 urlpatterns = [
@@ -22,4 +24,7 @@ urlpatterns = [
     path("portfolios/<int:portfolio_id>/items/", PortfolioItemCreateView.as_view(), name="portfolio-item-create"),
     path("portfolio-items/<int:pk>/", PortfolioItemDetailView.as_view(), name="portfolio-item-detail"),
     path("portfolios/<int:pk>/valuation/", PortfolioValuationView.as_view(), name="portfolio-valuation"),
+
+    path("watchlist/", WatchlistListCreateView.as_view(), name="watchlist-list-create"),
+    path("watchlist/<int:pk>/", WatchlistDeleteView.as_view(), name="watchlist-delete"),
 ]

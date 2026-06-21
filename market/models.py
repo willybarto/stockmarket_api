@@ -63,3 +63,20 @@ class QuoteRequestLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.request_date} ({self.count})"
+
+
+class Watchlist(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="watchlists"
+    )
+    asset = models.ForeignKey(
+        Asset, on_delete=models.CASCADE, related_name="watchers"
+    )
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "asset")
+        ordering = ["-added_at"]
+
+    def __str__(self):
+        return f"{self.user.username} -> {self.asset.symbol}"

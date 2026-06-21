@@ -130,6 +130,11 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
     ),
+    "DEFAULT_THROTTLE_RATES": {
+        "quote_basic": "10/day",
+        "quote_pro": "100/day",
+    },
+    "EXCEPTION_HANDLER": "market.exception_handlers.custom_exception_handler",
 }
 
 

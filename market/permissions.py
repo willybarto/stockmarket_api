@@ -8,3 +8,14 @@ class IsOwner(BasePermission):
         if hasattr(obj, "portfolio"):
             return obj.portfolio.user == request.user
         return False
+
+
+class IsProUser(BasePermission):
+    message = "Questa funzionalità è riservata agli utenti Pro."
+
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == "pro"
+        )
