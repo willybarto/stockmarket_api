@@ -224,6 +224,22 @@ Deploy Render:
 
 Dai test effettuati, l'endpoint pubblico `GET /api/assets/` risponde correttamente anche online e restituisce la lista JSON degli asset demo.
 
+### Configurazione Render
+
+Il progetto include uno script `build.sh` che Render esegue automaticamente ad ogni deploy. Lo script:
+
+1. Installa le dipendenze da `requirements.txt`.
+2. Raccoglie i file statici (`collectstatic`).
+3. Applica le migrazioni del database.
+4. Esegue `python manage.py seed_demo` per popolare il database con utenti, asset, storico prezzi, portafogli e watchlist demo.
+
+Poiché Render utilizza un filesystem effimero con il piano gratuito, il database SQLite viene ricreato ad ogni deploy. Lo script `build.sh` garantisce che i dati demo siano sempre disponibili senza intervento manuale.
+
+Impostazioni su Render:
+
+- **Build Command:** `./build.sh`
+- **Start Command:** `gunicorn config.wsgi:application`
+
 ## Endpoint principali
 
 | Metodo | URL | Auth | Ruolo | Request body | Esempio risposta | Descrizione |
@@ -597,6 +613,7 @@ stockmarket_api/
 │       └── commands/
 │           ├── seed_demo.py        # Popola il database demo
 │           └── simulate_prices.py  # Genera variazioni di prezzo simulate
+├── build.sh               # Script di build per Render (install + migrate + seed)
 ├── db.sqlite3
 ├── requirements.txt
 ├── manage.py
