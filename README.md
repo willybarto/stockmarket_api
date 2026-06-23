@@ -247,6 +247,7 @@ Impostazioni su Render:
 | POST | `/api/auth/register/` | No | Pubblico | `username`, `email`, `password`, `password_confirm`, `role` | `{"id":4,"username":"newuser","email":"new@example.com","role":"basic"}` | Registra un nuovo utente. |
 | POST | `/api/auth/login/` | No | Pubblico | `username`, `password` | `{"refresh":"...","access":"..."}` | Restituisce refresh e access token JWT. |
 | POST | `/api/auth/token/refresh/` | No | Pubblico | `refresh` | `{"access":"..."}` | Restituisce un nuovo access token. |
+| POST | `/api/auth/token/verify/` | No | Pubblico | `token` | `{}` | Verifica se un access token è ancora valido. Restituisce `200 OK` se valido, `401` se scaduto o invalido. |
 | GET | `/api/auth/me/` | Sì | Utente autenticato | Nessuno | `{"id":2,"username":"basic_demo","email":"basic@example.com","role":"basic"}` | Restituisce i dati dell'utente autenticato. |
 | GET | `/api/assets/` | No | Pubblico | Nessuno | `[{"id":1,"symbol":"AAPL","name":"Apple Inc."}]` | Lista degli asset disponibili. |
 | GET | `/api/assets/<id>/` | No | Pubblico | Nessuno | `{"id":1,"symbol":"AAPL","name":"Apple Inc.","sector":"Technology"}` | Dettaglio di un asset. |
