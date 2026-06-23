@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from rest_framework import generics, permissions, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -176,15 +177,16 @@ class AssetHistoryView(APIView):
         elif interval == "monthly":
             results = _sample_by_interval(results, 30)
 
-        serializer = HistoricalPriceSerializer(results, many=True)
+        paginator = PageNumberPagination()
+        paginated = paginator.paginate_queryset(results, request)
+        serializer = HistoricalPriceSerializer(paginated, many=True)
 
-        return Response({
+        return paginator.get_paginated_response({
             "asset_id": asset.id,
             "symbol": asset.symbol,
             "role": request.user.role,
             "max_allowed_days": max_days,
             "interval": interval,
-            "count": len(serializer.data),
             "results": serializer.data,
         })
 

@@ -9,6 +9,9 @@ class Asset(models.Model):
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ["symbol"]
+
     def __str__(self):
         return f"{self.symbol} - {self.name}"
 

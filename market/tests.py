@@ -23,7 +23,7 @@ class AssetTests(APITestCase):
     def test_asset_list(self):
         response = self.client.get("/api/assets/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        symbols = [a["symbol"] for a in response.data]
+        symbols = [a["symbol"] for a in response.data["results"]]
         self.assertIn("TEST", symbols)
         self.assertNotIn("DEAD", symbols)
 
@@ -103,7 +103,7 @@ class HistoryTests(APITestCase):
             f"/api/assets/{self.asset.id}/history/?days=30"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertLessEqual(len(response.data["results"]), 30)
+        self.assertLessEqual(len(response.data["results"]["results"]), 30)
 
     def test_history_basic_365_forbidden(self):
         self.client.force_authenticate(user=self.basic_user)
@@ -128,6 +128,7 @@ class HistoryTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertLessEqual(response.data["count"], 11)
+        self.assertIn("results", response.data)
 
     def test_history_invalid_date_format(self):
         self.client.force_authenticate(user=self.basic_user)
@@ -150,6 +151,7 @@ class HistoryTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertLess(response.data["count"], 30)
+        self.assertIn("next", response.data)
 
 
 class PortfolioCRUDTests(APITestCase):
@@ -194,8 +196,8 @@ class PortfolioCRUDTests(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get("/api/portfolios/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["name"], "My Portfolio")
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["name"], "My Portfolio")
 
     def test_update_portfolio(self):
         portfolio = Portfolio.objects.create(user=self.user, name="Old Name")
@@ -279,7 +281,7 @@ class WatchlistTests(APITestCase):
         self.client.force_authenticate(user=self.pro_user)
         response = self.client.get("/api/watchlist/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data["count"], 1)
 
     def test_watchlist_pro_delete(self):
         wl = Watchlist.objects.create(user=self.pro_user, asset=self.asset)
