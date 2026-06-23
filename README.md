@@ -429,18 +429,127 @@ curl -X DELETE "http://127.0.0.1:8000/api/watchlist/4/" \
 -H "Authorization: Bearer $PRO_TOKEN"
 ```
 
-## Esempi di test sul deploy online
+## Workflow di test sul deploy online (Render)
 
-Gli stessi comandi possono essere eseguiti anche contro il deploy Render, sostituendo la base locale con:
+I seguenti comandi curl sono pronti all'uso e possono essere copiati e incollati direttamente nel terminale per testare l'API sul deploy Render senza alcuna modifica.
 
-```text
-https://stockmarket-api-e7rk.onrender.com
-```
-
-Esempio:
+### 1. Endpoint pubblico: lista asset
 
 ```bash
 curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/assets/"
+```
+
+### 2. Login come utente basic e salvataggio token
+
+```bash
+curl -s -X POST "https://stockmarket-api-e7rk.onrender.com/api/auth/login/" \
+-H "Content-Type: application/json" \
+-d '{"username":"basic_demo","password":"basic12345"}'
+```
+
+Copiare il valore del campo `access` e salvarlo in una variabile:
+
+```bash
+TOKEN="INCOLLA_QUI_ACCESS_TOKEN"
+```
+
+### 3. Profilo utente autenticato
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/auth/me/" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+### 4. Quotazione asset (con rate limiting reale)
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/assets/1/quote/" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+### 5. Storico prezzi (30 giorni, consentito a basic)
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/assets/1/history/?days=30" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+### 6. Azione vietata: storico esteso (365 giorni, vietato a basic)
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/assets/1/history/?days=365" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+Risultato atteso: `403 Forbidden`.
+
+### 7. Azione vietata: watchlist (riservata a utenti Pro)
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/watchlist/" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+Risultato atteso: `403 Forbidden` con messaggio "Questa funzionalità è riservata agli utenti Pro."
+
+### 8. CRUD Portfolio: creazione nuovo portafoglio
+
+```bash
+curl -X POST "https://stockmarket-api-e7rk.onrender.com/api/portfolios/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer $TOKEN" \
+-d '{"name":"Test Portfolio Online"}'
+```
+
+### 9. Lista portafogli dell'utente
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/portfolios/" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+### 10. Valutazione portafoglio con gain/loss
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/portfolios/1/valuation/" \
+-H "Authorization: Bearer $TOKEN"
+```
+
+### 11. Login come utente pro
+
+```bash
+curl -s -X POST "https://stockmarket-api-e7rk.onrender.com/api/auth/login/" \
+-H "Content-Type: application/json" \
+-d '{"username":"pro_demo","password":"pro12345"}'
+```
+
+```bash
+PRO_TOKEN="INCOLLA_QUI_ACCESS_TOKEN_PRO"
+```
+
+### 12. Storico esteso (365 giorni, consentito a pro)
+
+```bash
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/assets/1/history/?days=365" \
+-H "Authorization: Bearer $PRO_TOKEN"
+```
+
+### 13. Watchlist (solo pro): lista, aggiunta, rimozione
+
+```bash
+# Lista watchlist
+curl -X GET "https://stockmarket-api-e7rk.onrender.com/api/watchlist/" \
+-H "Authorization: Bearer $PRO_TOKEN"
+
+# Aggiungere asset alla watchlist
+curl -X POST "https://stockmarket-api-e7rk.onrender.com/api/watchlist/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer $PRO_TOKEN" \
+-d '{"asset":4}'
+
+# Rimuovere dalla watchlist (usare l'id restituito dalla POST)
+curl -X DELETE "https://stockmarket-api-e7rk.onrender.com/api/watchlist/4/" \
+-H "Authorization: Bearer $PRO_TOKEN"
 ```
 
 ## Validazione e gestione errori
