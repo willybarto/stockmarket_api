@@ -218,11 +218,15 @@ python manage.py test --verbosity=2
 
 ## Deploy online
 
-Deploy Render:
+Deploy Render (Root API):
 
 [https://stockmarket-api-e7rk.onrender.com](https://stockmarket-api-e7rk.onrender.com)
 
-Dai test effettuati, l'endpoint pubblico `GET /api/assets/` risponde correttamente anche online e restituisce la lista JSON degli asset demo.
+Endpoint API pubblico con interfaccia Browsable API (Lista Asset):
+
+[https://stockmarket-api-e7rk.onrender.com/api/assets/](https://stockmarket-api-e7rk.onrender.com/api/assets/)
+
+Dai test effettuati, l'endpoint pubblico `GET /api/assets/` risponde correttamente anche online e restituisce la lista degli asset demo.
 
 ### Configurazione Render
 
